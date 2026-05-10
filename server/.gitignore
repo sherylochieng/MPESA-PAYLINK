@@ -1,0 +1,4 @@
+.env
+paylink.db
+node_modules
+receipts
