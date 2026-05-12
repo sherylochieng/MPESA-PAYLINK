@@ -1,11 +1,11 @@
-const Database = require("better-sqlite3"); // import the tool
-const path = require("path");               // built-in path helper
+const Database = require("better-sqlite3");
+const path = require("path");
 
-const db = new Database(path.join(__dirname, "paylink.db")); // create/open database file...// Create (or open) a database file called paylink.db in the server folder
+// Create (or open) a database file called paylink.db in the server folder
+const db = new Database(path.join(__dirname, "paylink.db"));
 
-
-db.pragma("journal_mode = WAL"); // prevent race conditions....
 // Enable WAL mode for better performance when reading and writing at the same time
+db.pragma("journal_mode = WAL");
 
 // Create our two tables if they don't already exist
 db.exec(`
