@@ -212,7 +212,7 @@
 const express = require("express");
 const db = require("../db");
 const { initiateSTKPush } = require("../services/mpesa");
-const { generateReceipt } = require("../services/receipt");
+// const { generateReceipt } = require("../services/receipt");
 
 const router = express.Router();
 
@@ -352,24 +352,24 @@ router.post("/mpesa/callback", async (req, res) => {
   );
 
   // Generate a PDF receipt
-  const link = db.prepare("SELECT * FROM links WHERE id = ?").get(
-    payment.link_id
-  );
+  // const link = db.prepare("SELECT * FROM links WHERE id = ?").get(
+  //   payment.link_id
+  // );
 
-  try {
-    await generateReceipt({
-      receiptNumber: mpesaReceipt,
-      clientName: link.client_name,
-      amount: amount,
-      phone: phoneNumber,
-      description: link.description,
-      date: transactionDate,
-      linkId: link.id,
-    });
-    console.log(`Receipt generated for ${mpesaReceipt}`);
-  } catch (err) {
-    console.error("Receipt generation failed:", err);
-  }
+  // try {
+  //   await generateReceipt({
+  //     receiptNumber: mpesaReceipt,
+  //     clientName: link.client_name,
+  //     amount: amount,
+  //     phone: phoneNumber,
+  //     description: link.description,
+  //     date: transactionDate,
+  //     linkId: link.id,
+  //   });
+  //   console.log(`Receipt generated for ${mpesaReceipt}`);
+  // } catch (err) {
+  //   console.error("Receipt generation failed:", err);
+  // }
 });
 
 // GET /payment-status/:linkId -- Check if a payment has been completed

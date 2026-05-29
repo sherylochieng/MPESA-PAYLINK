@@ -45,7 +45,7 @@ app.use(express.json());  // Parse incoming JSON request bodies so req.body work
 // Mount route files at their URL paths
 app.use("/api/links", linkRoutes);
 app.use("/api", paymentRoutes);
-app.use("/api/receipts", receiptRoutes);
+// app.use("/api/receipts", receiptRoutes);
 
 // A simple health check -- hit this to confirm the server is running
 app.get("/api/health", (req, res) => {
