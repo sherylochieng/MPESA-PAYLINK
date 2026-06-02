@@ -1,8 +1,8 @@
-const PDFDocument = require("pdfkit");
-const fs = require("fs");
-const path = require("path");
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+const path = require('path');
 
-const RECEIPTS_DIR = path.join(__dirname, "..", "receipts");
+const RECEIPTS_DIR = path.join(__dirname, '..', 'receipts');
 
 // Create the receipts directory if it doesn't exist
 if (!fs.existsSync(RECEIPTS_DIR)) {
@@ -16,7 +16,7 @@ async function generateReceipt(data) {
   return new Promise((resolve, reject) => {
     // Create a new A4-sized PDF with 50-point margins on all sides
     const doc = new PDFDocument({
-      size: "A4",
+      size: 'A4',
       margin: 50,
     });
 
@@ -31,60 +31,60 @@ async function generateReceipt(data) {
     // Large, bold title centered at the top
     doc
       .fontSize(24)
-      .font("Helvetica-Bold")
-      .fillColor("#153564")
-      .text("PAYMENT RECEIPT", { align: "center" });
+      .font('Helvetica-Bold')
+      .fillColor('#153564')
+      .text('PAYMENT RECEIPT', { align: 'center' });
 
     doc.moveDown(0.5); // Move down half a line height
 
     // Orange horizontal line under the title
     doc
-      .strokeColor("#FF6600")
+      .strokeColor('#FF6600')
       .lineWidth(2)
-      .moveTo(50, doc.y)       // Start at left margin, current y position
-      .lineTo(545, doc.y)      // Draw to right margin
-      .stroke();               // Actually render the line
+      .moveTo(50, doc.y) // Start at left margin, current y position
+      .lineTo(545, doc.y) // Draw to right margin
+      .stroke(); // Actually render the line
 
     doc.moveDown(1);
 
     // ---- RECEIPT DETAILS (two-column layout) ----
-    const startY = doc.y;      // Remember current position for alignment
-    const leftCol = 50;        // Left column x position
-    const rightCol = 300;      // Right column x position
+    const startY = doc.y; // Remember current position for alignment
+    const leftCol = 50; // Left column x position
+    const rightCol = 300; // Right column x position
 
-    doc.fontSize(10).font("Helvetica").fillColor("#333333");
+    doc.fontSize(10).font('Helvetica').fillColor('#333333');
 
     // Left column: receipt number, date, client name
-    drawField(doc, "Receipt Number", data.receiptNumber, leftCol, startY);
-    drawField(doc, "Date", formatMpesaDate(data.date), leftCol, startY + 40);
-    drawField(doc, "Client", data.clientName, leftCol, startY + 80);
+    drawField(doc, 'Receipt Number', data.receiptNumber, leftCol, startY);
+    drawField(doc, 'Date', formatMpesaDate(data.date), leftCol, startY + 40);
+    drawField(doc, 'Client', data.clientName, leftCol, startY + 80);
 
     // Right column: phone number, reference
-    drawField(doc, "Phone", formatDisplayPhone(data.phone), rightCol, startY);
+    drawField(doc, 'Phone', formatDisplayPhone(data.phone), rightCol, startY);
     drawField(
       doc,
-      "Reference",
+      'Reference',
       data.linkId.slice(0, 8).toUpperCase(),
       rightCol,
-      startY + 40
+      startY + 40,
     );
 
     // ---- AMOUNT BOX ----
     // A light blue rectangle with the payment amount prominently displayed
     doc.y = startY + 140;
 
-    doc.rect(50, doc.y, 495, 60).fill("#F0F4F8");
+    doc.rect(50, doc.y, 495, 60).fill('#F0F4F8');
 
     doc
       .fontSize(12)
-      .font("Helvetica")
-      .fillColor("#666666")
-      .text("Amount Paid", 70, doc.y + 12);
+      .font('Helvetica')
+      .fillColor('#666666')
+      .text('Amount Paid', 70, doc.y + 12);
 
     doc
       .fontSize(28)
-      .font("Helvetica-Bold")
-      .fillColor("#153564")
+      .font('Helvetica-Bold')
+      .fillColor('#153564')
       .text(`KES ${Number(data.amount).toLocaleString()}`, 70, doc.y + 28);
 
     doc.y += 80;
@@ -93,16 +93,16 @@ async function generateReceipt(data) {
     if (data.description) {
       doc
         .fontSize(10)
-        .font("Helvetica-Bold")
-        .fillColor("#333333")
-        .text("Description", 50, doc.y);
+        .font('Helvetica-Bold')
+        .fillColor('#333333')
+        .text('Description', 50, doc.y);
 
       doc.moveDown(0.3);
 
       doc
         .fontSize(10)
-        .font("Helvetica")
-        .fillColor("#555555")
+        .font('Helvetica')
+        .fillColor('#555555')
         .text(data.description, 50, doc.y, { width: 495 });
 
       doc.moveDown(1);
@@ -113,7 +113,7 @@ async function generateReceipt(data) {
 
     // Thin gray line
     doc
-      .strokeColor("#CCCCCC")
+      .strokeColor('#CCCCCC')
       .lineWidth(0.5)
       .moveTo(50, doc.y)
       .lineTo(545, doc.y)
@@ -123,20 +123,20 @@ async function generateReceipt(data) {
 
     doc
       .fontSize(8)
-      .font("Helvetica")
-      .fillColor("#999999")
-      .text("This is a computer-generated receipt. No signature required.", {
-        align: "center",
+      .font('Helvetica')
+      .fillColor('#999999')
+      .text('This is a computer-generated receipt. No signature required.', {
+        align: 'center',
       });
 
-    doc.text("Powered by Mctaba Paylink", { align: "center" });
+    doc.text('Powered by Mctaba Paylink', { align: 'center' });
 
     // ---- FINALIZE ----
     doc.end(); // Signal that we're done writing to the PDF
 
     // Resolve the promise when the file is fully written
-    stream.on("finish", () => resolve(filePath));
-    stream.on("error", reject);
+    stream.on('finish', () => resolve(filePath));
+    stream.on('error', reject);
   });
 }
 
@@ -145,13 +145,13 @@ async function generateReceipt(data) {
  * The label is small and gray. The value is larger and bold.
  */
 function drawField(doc, label, value, x, y) {
-  doc.fontSize(8).font("Helvetica").fillColor("#999999").text(label, x, y);
+  doc.fontSize(8).font('Helvetica').fillColor('#999999').text(label, x, y);
 
   doc
     .fontSize(11)
-    .font("Helvetica-Bold")
-    .fillColor("#333333")
-    .text(value || "N/A", x, y + 14);
+    .font('Helvetica-Bold')
+    .fillColor('#333333')
+    .text(value || 'N/A', x, y + 14);
 }
 
 /**
@@ -169,8 +169,18 @@ function formatMpesaDate(dateStr) {
   const min = s.slice(10, 12);
 
   const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   return `${parseInt(day)} ${months[parseInt(month) - 1]} ${year}, ${hour}:${min}`;
@@ -182,7 +192,7 @@ function formatMpesaDate(dateStr) {
  */
 function formatDisplayPhone(phone) {
   const p = String(phone);
-  if (p.length === 12 && p.startsWith("254")) {
+  if (p.length === 12 && p.startsWith('254')) {
     return `+254 ${p.slice(3, 6)} ${p.slice(6, 9)} ${p.slice(9)}`;
   }
   return p;

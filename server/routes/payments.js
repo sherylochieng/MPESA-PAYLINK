@@ -212,7 +212,7 @@
 const express = require("express");
 const db = require("../db");
 const { initiateSTKPush } = require("../services/mpesa");
-// const { generateReceipt } = require("../services/receipt");
+const { generateReceipt } = require("../services/receipt");
 
 const router = express.Router();
 
@@ -274,9 +274,10 @@ router.post("/mpesa/callback", async (req, res) => {
   // If you take too long or return an error, Safaricom will retry the callback,
   // and you might process the same payment twice.
   res.json({ ResultCode: 0, ResultDesc: "Accepted" });
-
+console.log("Raw body:", JSON.stringify(req.body));
   // Extract the callback data from Safaricom's payload
   const callback = req.body.Body?.stkCallback;
+  
 
   if (!callback) {
     console.error("Invalid callback payload:", req.body);
@@ -295,10 +296,13 @@ router.post("/mpesa/callback", async (req, res) => {
 
   // ResultCode 0 means the payment was successful
   // Any other code means failure (cancelled, wrong PIN, insufficient funds, etc.)
-  if (ResultCode !== 0) {
+ if (ResultCode !== 0) {
     console.log("Payment failed or was cancelled:", ResultDesc);
     return;
-  }
+}
+
+
+
 
   // Extract the payment details from the metadata
   // Safaricom sends metadata as an array of { Name, Value } objects
@@ -352,24 +356,24 @@ router.post("/mpesa/callback", async (req, res) => {
   );
 
   // Generate a PDF receipt
-  // const link = db.prepare("SELECT * FROM links WHERE id = ?").get(
-  //   payment.link_id
-  // );
+  const link = db.prepare("SELECT * FROM links WHERE id = ?").get(
+    payment.link_id
+  );
 
-  // try {
-  //   await generateReceipt({
-  //     receiptNumber: mpesaReceipt,
-  //     clientName: link.client_name,
-  //     amount: amount,
-  //     phone: phoneNumber,
-  //     description: link.description,
-  //     date: transactionDate,
-  //     linkId: link.id,
-  //   });
-  //   console.log(`Receipt generated for ${mpesaReceipt}`);
-  // } catch (err) {
-  //   console.error("Receipt generation failed:", err);
-  // }
+  try {
+    await generateReceipt({
+      receiptNumber: mpesaReceipt,
+      clientName: link.client_name,
+      amount: amount,
+      phone: phoneNumber,
+      description: link.description,
+      date: transactionDate,
+      linkId: link.id,
+    });
+    console.log(`Receipt generated for ${mpesaReceipt}`);
+  } catch (err) {
+    console.error("Receipt generation failed:", err);
+  }
 });
 
 // GET /payment-status/:linkId -- Check if a payment has been completed
