@@ -305,13 +305,9 @@ The patterns learned here — OAuth, STK Push, webhooks, async payment flows —
 
 ## About
 
-Built by **Sheryl Ochieng** as part of the Mctaba Labs Software Engineering Program — Week 10 capstone project.
+Built by **Sheryl Ochieng** 
 
 Follow the build journey: **#BuildingWithSheryl**
-
-- 📝 [Hashnode](https://hashnode.com/@sherylochieng)
-- 💼 [LinkedIn](https://linkedin.com/in/sherylochieng)
-- 🎵 [TikTok](https://tiktok.com/@sherylochieng)
 
 ---
 
