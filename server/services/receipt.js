@@ -129,7 +129,7 @@ async function generateReceipt(data) {
         align: 'center',
       });
 
-    doc.text('Powered by Mctaba Paylink', { align: 'center' });
+    doc.text('Powered Sheryl.dev', { align: 'center' });
 
     // ---- FINALIZE ----
     doc.end(); // Signal that we're done writing to the PDF
