@@ -1,4 +1,4 @@
-# Paylink — M-Pesa Payment Links for Kenyan Businesses
+# Paylink-M-Pesa Payment Links for Kenyan Businesses
 
 > *Create a payment link. Share it. Get paid via M-Pesa. Instantly.*
 
@@ -6,7 +6,7 @@
 
 ## 🇰🇪 What Is Paylink?
 
-Paylink is a web application that helps business owners generate unique payment links for their clients. When a client opens the link, an STK Push prompt is automatically sent to their phone. They enter their M-Pesa PIN and payment is confirmed — no paybill navigation, no manual amount entry, no room for error.
+Paylink is a web application that helps business owners generate unique payment links for their clients. When a client opens the link, an STK Push prompt is automatically sent to their phone. They enter their M-Pesa PIN and payment is confirmed  no paybill navigation, no manual amount entry, no room for error.
 
 A branded PDF receipt is generated automatically after every successful payment.
 
