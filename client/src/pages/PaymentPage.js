@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef,useCallback } from "react";
 import { useParams } from "react-router-dom";
 import {
   getLink,
@@ -29,31 +29,33 @@ function PaymentPage() {
   const pollingRef = useRef(null);
 
   // Load the payment link details when the component mounts
-  useEffect(() => {
-    loadLink();
-
-    // Cleanup: stop polling if the user navigates away before payment completes
-    // This is the useEffect cleanup function from Week 8
-    return () => {
-      if (pollingRef.current) clearInterval(pollingRef.current);
-    };
-  }, [linkId]);
-
-  async function loadLink() {
+  
+  const loadLink = useCallback(async () => {
     try {
       const data = await getLink(linkId);
       setLink(data);
-      // Pre-fill the phone input with the number stored in the link
+
+      // Pre-fill the phone input
       setPhone(formatInputPhone(data.client_phone));
 
-      // If this link was already paid, show the success state immediately
+      // Show success if the link is already paid
       if (data.status === "paid") {
         setStatus("paid");
       }
     } catch (err) {
       setError("This payment link is invalid or has expired.");
     }
-  }
+  }, [linkId]);
+
+  useEffect(() => {
+    loadLink();
+
+    // Stop polling if the user navigates away
+    return () => {
+      if (pollingRef.current) clearInterval(pollingRef.current);
+    };
+  }, [loadLink]);
+
 
   async function handlePay() {
     setStatus("processing");
