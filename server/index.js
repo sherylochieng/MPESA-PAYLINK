@@ -38,6 +38,10 @@ const receiptRoutes = require("./routes/receipts");
 
 const app = express();
 
+app.get("/", (req, res) => {
+  res.send("MPESA PayLink API is running");
+});
+
 // Middleware -- these run on EVERY request before your route handlers
 app.use(cors());          // Allow React on port 3000 to call this server on port 5000
 app.use(express.json());  // Parse incoming JSON request bodies so req.body works
